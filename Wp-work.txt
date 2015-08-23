@@ -1,0 +1,115 @@
+﻿//lấy id thu mục trong single.php
+<?php
+    $id = get_the_id();
+    $terms = get_the_terms( $id, 'category' );
+    // print_r( $terms );
+    foreach($terms as $term) {
+        $idthumuc = $term->term_id;   
+    };
+?> //END
+
+//lấy customfied
+<?php echo get_post_meta($post->ID,'tencustomfied',true); ?>
+
+//lấy tên thu mục theo id thư mục
+<?php echo get_cat_name( $idthumuc ) ?>
+
+//lấy đường đẫn đên thư mục theo id thư mục
+<?php echo get_category_link( $idthumuc ); ?>
+
+// next , prev các bài viết trong cùng 1 danh mục hiện tại của bài viết đang xem
+   <?php 
+        $post_id = $post->ID; // current post id
+        $cat = get_the_category(); 
+        $current_cat_id = $cat[0]->cat_ID; // current category Id 
+        
+        $args = array('category'=>$current_cat_id,'orderby'=>'post_date','order'=> 'DESC');
+        $posts = get_posts($args);
+        // get ids of posts retrieved from get_posts
+        $ids = array();
+    foreach ($posts as $thepost) {
+        $ids[] = $thepost->ID;
+    }
+    // get and echo previous and next post in the same category
+        $thisindex = array_search($post->ID, $ids);
+        $previd = $ids[$thisindex-1];
+        $nextid = $ids[$thisindex+1];
+ 
+    if (!empty($nextid)){   ?>
+        <a rel="next" href="<?php echo get_permalink($nextid) ?>">Prev</a>
+    <?php }  if (!empty($previd)){   ?>
+        <a rel="prev" href="<?php echo get_permalink($previd) ?>">Next</a>
+    <?php  }  ?>
+
+//chuyển hướng người dùng ở lại trang chủ sau khi đăng nhập thành công(để trong function.php)
+/**
+ * Redirect user after successful login.
+ *
+ * @param string $redirect_to URL to redirect to.
+ * @param string $request URL the user is coming from.
+ * @param object $user Logged user's data.
+ * @return string
+ */
+function my_login_redirect( $redirect_to, $request, $user ) {
+	//is there a user to check?
+	global $user;
+	if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+		//check for admins
+		if ( in_array( 'administrator', $user->roles ) ) {
+			// redirect them to the default place
+			return $redirect_to;
+		} else {
+			return home_url();
+		}
+	} else {
+		return $redirect_to;
+	}
+}
+
+add_filter( 'login_redirect', 'my_login_redirect', 10, 3 );
+
+///get site url
+
+
+<?php echo  get_site_url(); ?>
+
+// get id category tại category hiện tại trong category.php
+$cat = get_query_var('cat');
+
+
+//lay id cua danh muc cao nhat trong category.php
+function pa_category_top_parent_id ($catid) {
+	 while ($catid) {
+	  $cat = get_category($catid); // get the object for the catid
+	  $catid = $cat->category_parent; // assign parent ID (if exists) to $catid
+	  // the while loop will continue whilst there is a $catid
+	  // when there is no longer a parent $catid will be NULL so we can assign our $catParent
+	  $catParent = $cat->cat_ID;
+	 }
+	return $catParent;
+	}
+	
+  //su dung
+  	$catid = get_query_var('cat');
+	echo pa_category_top_parent_id ($catid);
+//////////// end lay id cua danh muc cao nhat trong category.php
+
+//lay id cua danh muc cao nhat trong single.php
+function smart_category_top_parent_id ($catid) {
+    while ($catid) {
+        $cat = get_category($catid); // get the object for the catid
+        $catid = $cat->category_parent; // assign parent ID (if exists) to $catid
+          // the while loop will continue whilst there is a $catid
+          // when there is no longer a parent $catid will be NULL so we can assign our $catParent
+        $catParent = $cat->cat_ID;
+    }
+    return $catParent;
+}
+	
+  //su dung
+  	$category = get_the_category($post->ID);
+ 
+	$catid = $category[0]->cat_ID;
+ 
+	$top_level_cat = smart_category_top_parent_id ($catid);
+//////////// end lay id cua danh muc cao nhat trong single

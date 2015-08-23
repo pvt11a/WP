@@ -1,0 +1,26 @@
+<script type="text/javascript">
+function hide_float_right() {
+    var content = document.getElementById('float_content_right');
+    var hide = document.getElementById('hide_float_right');
+    if (content.style.display == "none")
+    {content.style.display = "block"; hide.innerHTML = '<a href="javascript:hide_float_right()">T?t Qu?ng Cáo [X]</a>'; }
+        else { content.style.display = "none"; hide.innerHTML = '<a href="javascript:hide_float_right()">Xem Qu?ng Cáo</a>';
+    }
+    }
+</script>
+<style>
+.float-ck { position: fixed; bottom: 0px; z-index: 9000}
+* html .float-ck {position:absolute;bottom:auto;top:expression(eval (document.documentElement.scrollTop+document.docum entElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0))) ;}
+#float_content_right {border: 1px solid #01AEF0;}
+#hide_float_right {text-align:right; font-size: 11px;}
+#hide_float_right a {background: #01AEF0; padding: 2px 4px; color: #FFF;}
+</style>
+<div class="float-ck" style="left: 0px" >
+<div id="hide_float_right">
+<a href="javascript:hide_float_right()">T?t Qu?ng Cáo [X]</a></div>
+<div id="float_content_right">
+
+<a href="http://wec.edu.vn/tin-tuc-khuyen-mai" target="_blank"><img style="width:230px" src="http://wec.edu.vn/wp-content/uploads/2015/06/pg11-e1433326469611.jpg" title="138 Asia Casino" /></a>
+
+</div>
+</div>
